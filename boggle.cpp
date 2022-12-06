@@ -91,6 +91,28 @@ std::set<std::string> boggle(const std::set<std::string>& dict, const std::set<s
 bool boggleHelper(const std::set<std::string>& dict, const std::set<std::string>& prefix, const std::vector<std::vector<char> >& board, 
 								   std::string word, std::set<std::string>& result, unsigned int r, unsigned int c, int dr, int dc)
 {
-//add your solution here!
+	if ( r == board.size() || c == board.size()) { //base case to check if you have reached the last row and column
+		return false;
+	}
+	if ( word.size() != 0 ) {
+		if ( (prefix.find(word) == prefix.end())) { //if the word is no longer in the prefix
+			if ( dict.find(word) != dict.end()) { //if the word is in the dictionary
+				result.insert(word);
+				return true;
+			}
+			else { //if the result is not in the dictionary
+				return false;
+			}
+		}
+	}
+	word += board[r][c];
+	bool recurse = boggleHelper( dict, prefix, board , word , result , r + dr, c + dc , dr , dc);
+	if ( recurse == false ) { //if it returns false which meant that the word is no longer in dictionary
+		if ( dict.find(word) != dict.end() ) { //check if the word is in the dictionary
+			result.insert(word);
+			return true;
+		}
+	}
+	return recurse;
 
 }
